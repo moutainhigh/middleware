@@ -2,9 +2,7 @@ package com.emotibot.middleware.step;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -26,10 +24,7 @@ import com.emotibot.middleware.task.TaskComparator;
 public abstract class AbstractStep implements Step
 {
     protected ExecutorService executorService;
-    protected Map<ResponseType, List<Response>> outputMap = new HashMap<ResponseType, List<Response>>();
-    protected List<Task> taskList = new ArrayList<Task>();
     protected int timeout = Constants.STEP_TIMEOUT;
-    protected Context context = null;
     
     public AbstractStep(ExecutorService executorService)
     {
@@ -42,20 +37,20 @@ public abstract class AbstractStep implements Step
     }
     
     @Override
-    public void execute()
+    public void execute(Context context)
     {
-        beforeRun();
-        execute1();
-        afterRun();
+        beforeRun(context);
+        execute1(context);
+        afterRun(context);
     }
     
-    public void execute1()
+    public void execute1(Context context)
     {
+        List<Task> taskList = context.getTaskList();
         if (taskList == null || taskList.isEmpty())
         {
             return;
         }
-        outputMap.clear();
         boolean needCloseThreadPool = false;
         if (executorService == null)
         {
@@ -86,13 +81,7 @@ public abstract class AbstractStep implements Step
                             break;
                         }
                         ResponseType type = response.getResponseType();
-                        List<Response> responseList = outputMap.get(type);
-                        if (responseList == null)
-                        {
-                            responseList = new ArrayList<Response>();
-                            outputMap.put(type, responseList);
-                        }
-                        responseList.add(response);
+                        context.addOutput(type, response);
                         break;
                     }
                     else
@@ -121,12 +110,6 @@ public abstract class AbstractStep implements Step
     }
     
     @Override
-    public void addTask(Task task)
-    {
-        taskList.add(task);
-    }
-    
-    @Override
     public void setTimeout(int timeout)
     {
         this.timeout = timeout;
@@ -136,16 +119,5 @@ public abstract class AbstractStep implements Step
     public int getTimeout()
     {
         return this.timeout;
-    }
-    
-    @Override
-    public void setContext(Context context)
-    {
-        this.context = context;
-    }
-    
-    public Context getContext()
-    {
-        return this.context;
     }
 }

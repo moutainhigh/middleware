@@ -1,23 +1,16 @@
 package com.emotibot.middleware.step;
 
 import com.emotibot.middleware.context.Context;
-import com.emotibot.middleware.task.Task;
 
 public interface Step
 {
-    public void beforeRun();
+    public void beforeRun(Context context);
     
-    public void afterRun();
+    public void afterRun(Context context);
     
-    public void execute();
-    
-    public void addTask(Task task);
-    
+    public void execute(Context context);
+        
     public void setTimeout(int timeout);
     
     public int getTimeout();
-    
-    public void setContext(Context context);
-    
-    public Context getContext();
 }

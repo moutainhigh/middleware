@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.emotibot.middleware.context.Context;
 import com.emotibot.middleware.request.HttpRequest;
 import com.emotibot.middleware.request.HttpRequestType;
 import com.emotibot.middleware.response.Response;
@@ -22,22 +23,22 @@ public class StepTest
         List<Response> responseList = null;
         
         @Override
-        public void beforeRun()
+        public void beforeRun(Context context)
         {
             IntentTask intentTask = new IntentTask();
             HttpRequest request = new HttpRequest(intentUrl + sentence, null, HttpRequestType.GET);
             intentTask.setRequest(request);
-            this.addTask(intentTask);
-            this.addTask(intentTask);
-            this.addTask(intentTask);
-            this.addTask(intentTask);
-            this.addTask(intentTask);
+            context.addTask(intentTask);
+            context.addTask(intentTask);
+            context.addTask(intentTask);
+            context.addTask(intentTask);
+            context.addTask(intentTask);
         }
 
         @Override
-        public void afterRun()
+        public void afterRun(Context context)
         {
-            responseList = this.outputMap.get(ResponseType.INTENT);
+            responseList = context.getOutputMap().get(ResponseType.INTENT);
         }
         
         public List<Response> getResponseList()
@@ -50,13 +51,14 @@ public class StepTest
     @Test
     public void test()
     {
+        Context context = new Context();
         MyStep myStep = new MyStep();
-        myStep.execute();
+        myStep.execute(context);
         List<Response> responseList = myStep.getResponseList();
         
         long startTime = System.currentTimeMillis();
         myStep = new MyStep();
-        myStep.execute();
+        myStep.execute(context);
         long endTime = System.currentTimeMillis();
         System.out.println("用时: " + (endTime - startTime) + "ms");
         System.out.println(responseList);
