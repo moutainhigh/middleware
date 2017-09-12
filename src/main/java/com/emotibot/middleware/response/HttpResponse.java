@@ -7,14 +7,14 @@ public class HttpResponse extends AbstractResponse
     
     public HttpResponse(String response, int stateCode)
     {
-        super(ResponseType.HTTP);
+        super(CommonResponseType.HTTP);
         this.response = response;
         this.stateCode = stateCode;
     }
     
     public HttpResponse()
     {
-        super(ResponseType.HTTP);
+        super(CommonResponseType.HTTP);
     }
     
     public String getResponse()

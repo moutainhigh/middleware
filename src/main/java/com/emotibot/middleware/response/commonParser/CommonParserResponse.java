@@ -1,7 +1,7 @@
 package com.emotibot.middleware.response.commonParser;
 
 import com.emotibot.middleware.response.AbstractResponse;
-import com.emotibot.middleware.response.ResponseType;
+import com.emotibot.middleware.response.CommonResponseType;
 import com.emotibot.middleware.utils.JsonUtils;
 
 public class CommonParserResponse extends AbstractResponse
@@ -11,12 +11,12 @@ public class CommonParserResponse extends AbstractResponse
     
     public CommonParserResponse()
     {
-        super(ResponseType.COMMON_PARSER);
+        super(CommonResponseType.COMMON_PARSER);
     }
     
     public CommonParserResponse(String jsonString)
     {
-        super(ResponseType.COMMON_PARSER);
+        super(CommonResponseType.COMMON_PARSER);
         commonParser = (CommonParser) JsonUtils.getObject(jsonString, CommonParser.class);
     }
 
@@ -69,6 +69,10 @@ public class CommonParserResponse extends AbstractResponse
         }
         CommonParserStarModule starModule = commonParser.getStar_name_module().get(0);
         if (starModule == null)
+        {
+            return null;
+        }
+        if (starModule.getProfession().trim().equals(""))
         {
             return null;
         }

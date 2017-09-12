@@ -7,8 +7,8 @@ import org.junit.Test;
 import com.emotibot.middleware.context.Context;
 import com.emotibot.middleware.request.HttpRequest;
 import com.emotibot.middleware.request.HttpRequestType;
+import com.emotibot.middleware.response.CommonResponseType;
 import com.emotibot.middleware.response.Response;
-import com.emotibot.middleware.response.ResponseType;
 import com.emotibot.middleware.task.restCallTask.IntentTask;
 
 public class StepTest
@@ -38,7 +38,7 @@ public class StepTest
         @Override
         public void afterRun(Context context)
         {
-            responseList = context.getOutputMap().get(ResponseType.INTENT);
+            responseList = context.getOutputMap().get(CommonResponseType.INTENT);
         }
         
         public List<Response> getResponseList()

@@ -31,7 +31,7 @@ public class NLU
     @Expose
     private String polarity;
 
-    @SerializedName("segment")
+    @SerializedName("keyword")
     @Expose
     private List<Segment> segment = null;
     

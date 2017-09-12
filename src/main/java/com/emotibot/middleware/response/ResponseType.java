@@ -1,6 +1,6 @@
 package com.emotibot.middleware.response;
 
-public enum ResponseType
+public interface ResponseType
 {
-    HTTP, INTENT, NLU, COMMON_PARSER
+    
 }

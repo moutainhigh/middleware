@@ -18,4 +18,5 @@ public class Constants
     public static final String MUSIC_START_TAG = "<START:MUSIC>";
     public static final String END_TAG = "<END>";
     public static final String ATP_TAG = "ATP";
+    public static final String PATIENT_TAG = "patient";
 }

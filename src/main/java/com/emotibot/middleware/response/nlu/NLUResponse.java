@@ -1,12 +1,15 @@
 package com.emotibot.middleware.response.nlu;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.emotibot.middleware.constants.Constants;
 import com.emotibot.middleware.response.AbstractResponse;
-import com.emotibot.middleware.response.ResponseType;
+import com.emotibot.middleware.response.CommonResponseType;
 import com.emotibot.middleware.utils.JsonUtils;
 import com.emotibot.middleware.utils.StringUtils;
 import com.google.gson.reflect.TypeToken;
@@ -17,13 +20,13 @@ public class NLUResponse extends AbstractResponse
     
     public NLUResponse()
     {
-        super(ResponseType.NLU);
+        super(CommonResponseType.NLU);
     }
     
     @SuppressWarnings("unchecked")
     public NLUResponse(String jsonString)
     {
-        super(ResponseType.NLU);
+        super(CommonResponseType.NLU);
         Type resultType = new TypeToken<List<NLU>>(){}.getType();
         nluList = (List<NLU>) JsonUtils.getObject(jsonString, resultType);
     }
@@ -90,9 +93,14 @@ public class NLUResponse extends AbstractResponse
         return parser(namedEntities, Constants.PERSON_START_TAG);
     }
     
-    public String getNameEntityBySRL()
+    /**
+     * 这里是为了取片名，因为片名中可能有动词，所以会考虑取最后两个动词的对象（考虑一个电影中极少有多个动词）
+     * 
+     */
+    public List<String> getNameEntityBySRL(int length)
     {
         NLU nlu = getNLU();
+        List<String> nameEntityList = new ArrayList<String>();
         if (nlu == null)
         {
             return null;
@@ -110,14 +118,89 @@ public class NLUResponse extends AbstractResponse
         Map<String, List<SRLElement>> srlElementMap = srl.getSrl();
         if (srlElementMap == null || srlElementMap.isEmpty())
         {
-            return nlu.getQuery();
+            nameEntityList.add(nlu.getQuery());
+            return nameEntityList;
         }
         List<SRLElement> srlElementList = srlElementMap.get(Constants.ATP_TAG);
         if (srlElementList == null || srlElementList.isEmpty())
         {
-            return nlu.getQuery();
+            srlElementList = srlElementMap.get(Constants.PATIENT_TAG);
         }
-        return parserNameEntityBySRL(srlElementList);
+        if (srlElementList == null || srlElementList.isEmpty())
+        {
+            nameEntityList.add(nlu.getQuery());
+            return nameEntityList;
+        }
+        nameEntityList.addAll(parserNameEntityBySRL(srlElementList, length));
+        return nameEntityList;
+    }
+    
+    
+    /**
+     * 具体逻辑如下：
+     * 1. 找到最后一个元素，获取pred字段
+     * 2. 从前往后，查找与最后一个元素一样的pred的元素
+     * 3. 将所有pred字段一样的token连在一起
+     * 
+     * 这样是因为电影名称一般是位于最后一个ATP中，但是有时一个电影名称会被拆成两个元素
+     * 
+     * http://dev1.emotibot.com:13901/?f=srl&q=%E6%88%91%E6%83%B3%E7%9C%8B%E5%B0%8F%E8%AF%9D%E8%A5%BF%E6%B8%B8
+     * 
+     * 小话西游会被拆成小话和西游两个
+     * 
+     * 这里要把所有的ATP中的nameEntity取回，这里是避免有些电影名称中包含动词，被截断了
+     * 
+     * @param srlElementList
+     * @return
+     */
+    private List<String> parserNameEntityBySRL(List<SRLElement> srlElementList, int length)
+    {
+        List<Map<String, String>> tokens = this.getNLU().getSrl().getTokens();
+        List<String> nameEntityList = new ArrayList<String>();
+        Set<String> predSet = new HashSet<String>();
+        List<String> predList = new ArrayList<String>();
+        for (SRLElement srlElement : srlElementList)
+        {
+            String pred = srlElement.getPred();
+            if (!predSet.contains(pred))
+            {
+                predSet.add(pred);
+                predList.add(pred);
+            }
+        }
+        if (predList.size() > length)
+        {
+            predList = predList.subList(predList.size() - length, predList.size());
+        }
+        for (String pred : predList)
+        {
+            StringBuilder sb = new StringBuilder();
+            for(SRLElement element : srlElementList)
+            {
+                if (element.getPred().equals(pred))
+                {
+                    List<String> arg2 = element.getArg2();                
+                    for (String token : arg2)
+                    {
+                        for(Map<String, String> tokenMap : tokens)
+                        {
+                            if (tokenMap.containsKey(token))
+                            {
+                                sb.append(tokenMap.get(token));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            nameEntityList.add(sb.toString());
+        }
+        //如果只有一个动词，可能输入是片名，但是片名中有动词
+        if (nameEntityList.size() < length)
+        {
+            nameEntityList.add(this.getNLU().getQuery());
+        }
+        return nameEntityList;
     }
     
     private String parser(String namedEntities, String startTag)
@@ -140,46 +223,41 @@ public class NLUResponse extends AbstractResponse
         return tmp.substring(0, endIndex);
     }
     
-    /**
-     * 具体逻辑如下：
-     * 1. 找到最后一个元素，获取pred字段
-     * 2. 从前往后，查找与最后一个元素一样的pred的元素
-     * 3. 将所有pred字段一样的token连在一起
-     * 
-     * 这样是因为电影名称一般是位于最后一个ATP中，但是有时一个电影名称会被拆成两个元素
-     * 
-     * http://dev1.emotibot.com:13901/?f=srl&q=%E6%88%91%E6%83%B3%E7%9C%8B%E5%B0%8F%E8%AF%9D%E8%A5%BF%E6%B8%B8
-     * 
-     * 小话西游会被拆成小话和西游两个
-     * 
-     * @param srlElementList
-     * @return
-     */
-    private String parserNameEntityBySRL(List<SRLElement> srlElementList)
+    public List<String> getValidSegmentForN()
     {
-        List<Map<String, String>> tokens = this.getNLU().getSrl().getTokens();
-        SRLElement srlElement = srlElementList.get(srlElementList.size() - 1);
-        String pred = srlElement.getPred();
-        //TODO
-        StringBuilder sb = new StringBuilder();
-        for(SRLElement element : srlElementList)
+        List<String> ret = new ArrayList<String>();
+        NLU nlu = getNLU();
+        if (nlu == null)
         {
-            if (element.getPred().equals(pred))
+            return ret;
+        }
+        
+        for (Segment segment : nlu.getSegment())
+        {
+            if (segment.getLevel() > 0 && segment.getPos().startsWith("n"))
             {
-                List<String> arg2 = element.getArg2();                
-                for (String token : arg2)
-                {
-                    for(Map<String, String> tokenMap : tokens)
-                    {
-                        if (tokenMap.containsKey(token))
-                        {
-                            sb.append(tokenMap.get(token));
-                            break;
-                        }
-                    }
-                }
+                ret.add(segment.getWord());
             }
         }
-        return sb.toString();
+        return ret;
+    }
+    
+    public List<String> getValidSegmentForA()
+    {
+        List<String> ret = new ArrayList<String>();
+        NLU nlu = getNLU();
+        if (nlu == null)
+        {
+            return ret;
+        }
+        
+        for (Segment segment : nlu.getSegment())
+        {
+            if (segment.getLevel() > 0 && segment.getPos().equals("a"))
+            {
+                ret.add(segment.getWord());
+            }
+        }
+        return ret;
     }
 }

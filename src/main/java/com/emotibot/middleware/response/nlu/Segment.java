@@ -20,6 +20,9 @@ public class Segment
     @SerializedName("flag")
     @Expose
     private int flag;
+    @SerializedName("level")
+    @Expose
+    private int level;
 
     public String getWord() 
     {
@@ -69,5 +72,15 @@ public class Segment
     public void setFlag(int flag) 
     {
         this.flag = flag;
+    }
+    
+    public int getLevel() 
+    {
+        return level;
+    }
+
+    public void setLevel(int level) 
+    {
+        this.level = level;
     }
 }
