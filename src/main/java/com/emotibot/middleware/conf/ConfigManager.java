@@ -1,6 +1,7 @@
 package com.emotibot.middleware.conf;
 
 import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import com.emotibot.middleware.constants.Constants;
@@ -53,7 +54,11 @@ public enum ConfigManager
     public int getPropertyInt(String key)
     {
         String ret = getProperty1(key);
-        return Integer.parseInt(ret);
+        if (ret != null)
+        {
+            return Integer.parseInt(ret);
+        }
+        return Integer.MIN_VALUE;
     }
     
     private String getProperty1(String key)
@@ -73,6 +78,23 @@ public enum ConfigManager
     
     private String getPropertyFromPropertyFile(String key)
     {
-        return properties.getProperty(key);
+        String ret = properties.getProperty(key);
+        return getStringWithUTF8(ret);
+    }
+    
+    private String getStringWithUTF8(String str)
+    {
+        if (str == null)
+        {
+            return null;
+        }
+        try
+        {
+            return new String(str.getBytes("ISO-8859-1"), "UTF-8");
+        } 
+        catch (UnsupportedEncodingException e)
+        {
+            return str;
+        }
     }
 }
