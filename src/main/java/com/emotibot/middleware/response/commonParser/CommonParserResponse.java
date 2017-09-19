@@ -78,4 +78,46 @@ public class CommonParserResponse extends AbstractResponse
         }
         return starModule.getName();
     }
+    
+    public int getVolume()
+    {
+        if (commonParser == null)
+        {
+            return Integer.MIN_VALUE;
+        }
+        if (commonParser.getVolume_module() == null)
+        {
+            return Integer.MIN_VALUE;
+        }
+        CommonParserVolumeModule volumeModule = commonParser.getVolume_module();
+        if (volumeModule.getVolume() < 0)
+        {
+            return Integer.MIN_VALUE;
+        }
+        else
+        {
+            return volumeModule.getVolume();
+        }
+    }
+    
+    public int getVolumeIncrement()
+    {
+        if (commonParser == null)
+        {
+            return Integer.MIN_VALUE;
+        }
+        if (commonParser.getVolume_module() == null)
+        {
+            return Integer.MIN_VALUE;
+        }
+        CommonParserVolumeModule volumeModule = commonParser.getVolume_module();
+        if (volumeModule.getVolume_incremental() < 0)
+        {
+            return Integer.MIN_VALUE;
+        }
+        else
+        {
+            return volumeModule.getVolume_incremental();
+        }
+    }
 }

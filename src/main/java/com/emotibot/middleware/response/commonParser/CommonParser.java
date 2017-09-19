@@ -27,6 +27,10 @@ public class CommonParser
     @Expose
     private List<CommonParserStarModule> star_name_module = null;
     
+    @SerializedName("volume_module")
+    @Expose
+    private CommonParserVolumeModule volume_module = null;
+    
     public void setStatus_code(int status_code)
     {
         this.status_code = status_code;
@@ -75,5 +79,15 @@ public class CommonParser
     public List<CommonParserStarModule> getStar_name_module()
     {
         return this.star_name_module;
+    }
+    
+    public void setVolume_module(CommonParserVolumeModule volume_module)
+    {
+        this.volume_module = volume_module;
+    }
+    
+    public CommonParserVolumeModule getVolume_module()
+    {
+        return this.volume_module;
     }
 }
