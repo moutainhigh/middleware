@@ -1,6 +1,12 @@
 package com.emotibot.middleware.step;
 
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+
 import com.emotibot.middleware.context.Context;
+import com.emotibot.middleware.response.Response;
+import com.emotibot.middleware.response.ResponseType;
 
 public interface Step
 {
@@ -13,4 +19,14 @@ public interface Step
     public void setTimeout(int timeout);
     
     public int getTimeout();
+    
+    public void setExecutorService(ExecutorService executorService);
+    
+    public ExecutorService getExecutorService();
+    
+    public void addOutput(Context context, ResponseType type, Response response);
+    
+    public Map<ResponseType, List<Response>> getOutputMap(Context context);
+    
+    public void clearOutputMap(Context context);
 }

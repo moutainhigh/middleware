@@ -38,7 +38,7 @@ public class StepTest
         @Override
         public void afterRun(Context context)
         {
-            responseList = context.getOutputMap().get(CommonResponseType.INTENT);
+            responseList = getOutputMap(context).get(CommonResponseType.INTENT);
         }
         
         public List<Response> getResponseList()

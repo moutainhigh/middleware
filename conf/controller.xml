@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stepControllerConfig>
+	<stepControlle name="1">
+		<stepInput className=""/>
+		<stepCollection index="1">
+			<step className="" index="1" timeout="1000"/>
+			<step className="" index="2" timeout="1000"/>
+			<step className="" index="3" timeout="1000"/>
+			<step className="" index="4" timeout="1000"/>
+		</stepCollection>
+		<adjustCollection type="OR" index="2">
+			<adjustCollection type="AND" index="1">
+				<adjust key="" type="Boolean" target="True"/>
+			</adjustCollection>
+			<adjust key="" type="Boolean" target="True"/>
+		</adjustCollection>
+		<stepCollection index="3">
+			<step className="" index="1" timeout="1000"/>
+		</stepCollection>
+		<stepOutput className=""/>
+	</stepControlle>
+	<stepControlle name="2">
+		<stepInput className=""/>
+		<stepCollection index="1">
+			<step className="" index="1" timeout="1000"/>
+		</stepCollection>
+		<adjustCollection type="OR" index="2">
+			<adjust key="" type="Boolean" target="True"/>
+		</adjustCollection>
+		<stepCollection index="3">
+			<step className="" index="1" timeout="1000"/>
+		</stepCollection>
+		<stepOutput className=""/>
+	</stepControlle>
+</stepControllerConfig>

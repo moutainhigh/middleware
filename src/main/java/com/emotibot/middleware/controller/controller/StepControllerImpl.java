@@ -2,13 +2,13 @@ package com.emotibot.middleware.controller.controller;
 
 /**
  * 
- * 这个是不需要重写的
+ * Controller会将输入的json写入到context中一个特定的字段中，input会默认从该字段中读取context，在input的实现中操作该字段
  * 
  * @author emotibot
  *
  */
 
-public class AbstractStepController implements StepController
+public class StepControllerImpl implements StepController
 {
 
     private String controllerName;

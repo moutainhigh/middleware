@@ -15,6 +15,8 @@ import com.emotibot.middleware.task.Task;
  * 
  * 但是一个线程必定同一个时刻只跑一个context
  * 
+ * outputMap是属于一个step的，所以这里要进行区分
+ * 
  * @author emotibot
  *
  */
@@ -22,7 +24,7 @@ import com.emotibot.middleware.task.Task;
 public class Context
 {
     private Map<String, Object> contextMap = new ConcurrentHashMap<String, Object>();
-    private Map<ResponseType, List<Response>> outputMap = new ConcurrentHashMap<ResponseType, List<Response>>();
+    private Map<String, Map<ResponseType, List<Response>>> outputMap = new ConcurrentHashMap<String, Map<ResponseType, List<Response>>>();
     private ThreadLocal<List<Task>> taskList = new ThreadLocal<List<Task>>();
     private String uniqId;
     
@@ -57,7 +59,7 @@ public class Context
         return taskList.get();
     }
     
-    public Map<ResponseType, List<Response>> getOutputMap()
+    public Map<String, Map<ResponseType, List<Response>>> getOutputMap()
     {
         return this.outputMap;
     }
@@ -77,13 +79,19 @@ public class Context
         taskList.get().add(task);
     }
     
-    public void addOutput(ResponseType type, Response response)
+    public void addOutput(String namespace, ResponseType type, Response response)
     {
-        List<Response> outputList = outputMap.get(type);
+        Map<ResponseType, List<Response>> choosedOutputMap = outputMap.get(namespace);
+        if (choosedOutputMap == null)
+        {
+            choosedOutputMap = new ConcurrentHashMap<ResponseType, List<Response>>();
+            outputMap.put(namespace, choosedOutputMap);
+        }
+        List<Response> outputList = choosedOutputMap.get(type);
         if (outputList == null)
         {
             outputList = new ArrayList<Response>();
-            outputMap.put(type, outputList);
+            choosedOutputMap.put(type, outputList);
         }
         outputList.add(response);
     }

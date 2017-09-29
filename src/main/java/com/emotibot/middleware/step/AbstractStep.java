@@ -3,6 +3,8 @@ package com.emotibot.middleware.step;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -81,7 +83,7 @@ public abstract class AbstractStep implements Step
                             break;
                         }
                         ResponseType type = response.getResponseType();
-                        context.addOutput(type, response);
+                        addOutput(context, type, response);
                         break;
                     }
                     else
@@ -119,5 +121,44 @@ public abstract class AbstractStep implements Step
     public int getTimeout()
     {
         return this.timeout;
+    }
+    
+    @Override
+    public void setExecutorService(ExecutorService executorService)
+    {
+        this.executorService = executorService;
+    }
+    
+    @Override
+    public ExecutorService getExecutorService()
+    {
+        return this.executorService;
+    }
+    
+    @Override
+    public void addOutput(Context context, ResponseType type, Response response)
+    {
+        String namespace = this.getClass().getName();
+        context.addOutput(namespace, type, response);
+    }
+    
+    @Override
+    public Map<ResponseType, List<Response>> getOutputMap(Context context)
+    {
+        String namespace = this.getClass().getName();
+        Map<ResponseType, List<Response>> ret = context.getOutputMap().get(namespace);
+        if (ret == null)
+        {
+            ret = new ConcurrentHashMap<ResponseType, List<Response>>();
+            context.getOutputMap().put(namespace, ret);
+        }
+        return ret;
+    }
+    
+    @Override
+    public void clearOutputMap(Context context)
+    {
+        String namespace = this.getClass().getName();
+        context.getOutputMap().remove(namespace);
     }
 }
