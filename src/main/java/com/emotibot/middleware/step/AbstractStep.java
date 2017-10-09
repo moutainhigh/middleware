@@ -41,14 +41,16 @@ public abstract class AbstractStep implements Step
     @Override
     public void execute(Context context)
     {
+        clearOutputMap(context);
         beforeRun(context);
         execute1(context);
         afterRun(context);
+        clearTaskList(context);
     }
     
     public void execute1(Context context)
     {
-        List<Task> taskList = context.getTaskList();
+        List<Task> taskList = context.getTaskListMap().get(getNameSpace());
         if (taskList == null || taskList.isEmpty())
         {
             return;
@@ -138,14 +140,14 @@ public abstract class AbstractStep implements Step
     @Override
     public void addOutput(Context context, ResponseType type, Response response)
     {
-        String namespace = this.getClass().getName();
+        String namespace = getNameSpace();
         context.addOutput(namespace, type, response);
     }
     
     @Override
     public Map<ResponseType, List<Response>> getOutputMap(Context context)
     {
-        String namespace = this.getClass().getName();
+        String namespace = getNameSpace();
         Map<ResponseType, List<Response>> ret = context.getOutputMap().get(namespace);
         if (ret == null)
         {
@@ -158,7 +160,28 @@ public abstract class AbstractStep implements Step
     @Override
     public void clearOutputMap(Context context)
     {
-        String namespace = this.getClass().getName();
+        String namespace = getNameSpace();
         context.getOutputMap().remove(namespace);
     }
+    
+    @Override
+    public String getNameSpace()
+    {
+        return this.getClass().getName();
+    }
+    
+    @Override
+    public void addTask(Context context, Task task)
+    {
+        String namespace = getNameSpace();
+        context.addTask(namespace, task);
+    }
+    
+    @Override
+    public void clearTaskList(Context context)
+    {
+        String namespace = getNameSpace();
+        context.getTaskListMap().remove(namespace);
+    }
+
 }

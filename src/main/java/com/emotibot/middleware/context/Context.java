@@ -17,6 +17,7 @@ import com.emotibot.middleware.task.Task;
  * 
  * outputMap是属于一个step的，所以这里要进行区分
  * 
+ * 
  * @author emotibot
  *
  */
@@ -25,19 +26,17 @@ public class Context
 {
     private Map<String, Object> contextMap = new ConcurrentHashMap<String, Object>();
     private Map<String, Map<ResponseType, List<Response>>> outputMap = new ConcurrentHashMap<String, Map<ResponseType, List<Response>>>();
-    private ThreadLocal<List<Task>> taskList = new ThreadLocal<List<Task>>();
+    private Map<String, List<Task>> taskListMap = new ConcurrentHashMap<String, List<Task>>();
     private String uniqId;
     
     public Context()
     {
         uniqId = Thread.currentThread().getName();
-        taskList.set(new ArrayList<Task>());
     }
     
     public Context(String uniqId)
     {
         this.uniqId = uniqId;
-        taskList.set(new ArrayList<Task>());
     }
     
     public Object getValue(String key)
@@ -54,9 +53,25 @@ public class Context
         contextMap.put(key, value);
     }
     
-    public List<Task> getTaskList()
+    public Map<String, List<Task>> getTaskListMap()
     {
-        return taskList.get();
+        return taskListMap;
+    }
+    
+    public void clearTaskListMap()
+    {
+        taskListMap.clear();
+    }
+    
+    public void addTask(String namespace, Task task)
+    {
+        List<Task> taskList = taskListMap.get(namespace);
+        if (taskList == null)
+        {
+            taskList = new ArrayList<Task>();
+            taskListMap.put(namespace, taskList);
+        }
+        taskList.add(task);
     }
     
     public Map<String, Map<ResponseType, List<Response>>> getOutputMap()
@@ -64,19 +79,9 @@ public class Context
         return this.outputMap;
     }
     
-    public void clearTaskList()
-    {
-        taskList.get().clear();
-    }
-    
     public void clearOutputMap()
     {
         outputMap.clear();
-    }
-    
-    public void addTask(Task task)
-    {
-        taskList.get().add(task);
     }
     
     public void addOutput(String namespace, ResponseType type, Response response)
@@ -106,4 +111,5 @@ public class Context
     {
         return this.uniqId;
     }
+    
 }

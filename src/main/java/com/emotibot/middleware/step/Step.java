@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import com.emotibot.middleware.context.Context;
 import com.emotibot.middleware.response.Response;
 import com.emotibot.middleware.response.ResponseType;
+import com.emotibot.middleware.task.Task;
 
 public interface Step
 {
@@ -28,5 +29,11 @@ public interface Step
     
     public Map<ResponseType, List<Response>> getOutputMap(Context context);
     
-    public void clearOutputMap(Context context);
+    public void clearOutputMap(Context context);  
+    
+    public String getNameSpace();
+    
+    public void addTask(Context context, Task task);
+    
+    public void clearTaskList(Context context);
 }

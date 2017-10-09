@@ -65,17 +65,19 @@ public class StepControllerElement implements ControllerElement
             switch (childNode.getNodeName())
             {
             case ElementConstants.STEP_INPUT_TAG:
-                buildStepInput(node);
+                buildStepInput(childNode);
                 break;
             case ElementConstants.STEP_OUTPUT_TAG:
-                buildStepOutput(node);
+                buildStepOutput(childNode);
                 break;
             case ElementConstants.STEP_COLLECTION_TAG:
-                buildStepCollection(node);
+                buildStepCollection(childNode);
                 break;
             case ElementConstants.ADJUST_COLLECTION_TAG:
-                buildAdjustCollection(node);
+                buildAdjustCollection(childNode);
                 break;
+            case ElementConstants.TEXT_ELEMENT_TAG:
+                continue;
             default:
                 logger.error("Can not load element with tag " + childNode.getNodeName());
                 break;

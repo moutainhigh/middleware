@@ -15,9 +15,16 @@ public class XmlUtilsTest
     public void test()
     {
         Document document = XmlUtils.parserXmlFile(XML_FILE);
-        NodeList nodeList = document.getElementsByTagName("stepControllerConfig");
+        NodeList nodeList = document.getChildNodes();
         Node node = nodeList.item(0);
         System.out.println(node.getNodeName());
+        NodeList childList = node.getChildNodes();
+        for (int i = 0; i < childList.getLength(); i ++)
+        {
+            Node child = childList.item(i);
+            System.out.println(child.getNodeName());
+        }
+        
     }
 
 }

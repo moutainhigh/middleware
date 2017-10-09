@@ -34,4 +34,6 @@ public class ElementConstants
     public static final String ADJUST_TYPE_COLLECTION = "Collection";
     public static final String ADJUST_TARGET_TRUE = "True";
     public static final String ADJUST_TARGET_FALSE = "False";
+    
+    public static final String TEXT_ELEMENT_TAG = "#text";
 }

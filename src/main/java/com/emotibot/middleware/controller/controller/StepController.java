@@ -25,8 +25,6 @@ package com.emotibot.middleware.controller.controller;
 public interface StepController
 {
     public void loadConfig(String filePath);
-    
-    public String getControllerName();
-    
-    public void execute(String jsonStr);
+        
+    public String execute(String controllerName, String jsonStr);
 }

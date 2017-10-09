@@ -28,11 +28,11 @@ public class StepTest
             IntentTask intentTask = new IntentTask();
             HttpRequest request = new HttpRequest(intentUrl + sentence, null, HttpRequestType.GET);
             intentTask.setRequest(request);
-            context.addTask(intentTask);
-            context.addTask(intentTask);
-            context.addTask(intentTask);
-            context.addTask(intentTask);
-            context.addTask(intentTask);
+            this.addTask(context, intentTask);
+            this.addTask(context, intentTask);
+            this.addTask(context, intentTask);
+            this.addTask(context, intentTask);
+            this.addTask(context, intentTask);
         }
 
         @Override

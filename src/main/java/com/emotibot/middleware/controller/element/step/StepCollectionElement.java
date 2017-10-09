@@ -51,6 +51,10 @@ public class StepCollectionElement implements ControllerElement
         for (int i = 0; i < childNodeList.getLength(); i ++)
         {
             Node childNode = childNodeList.item(i);
+            if (!childNode.getNodeName().equals(ElementConstants.STEP_TAG))
+            {
+                continue;
+            }
             StepElement step = new StepElement();
             step.setExecutorService(executorService);
             if (step.init(childNode))

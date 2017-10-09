@@ -71,10 +71,9 @@ public class StepElement implements ControllerElement
     public Context execute(Context context)
     {
         long startTime = System.currentTimeMillis();
-        step.clearOutputMap(context);
         step.execute(context);
         long endTime = System.currentTimeMillis();
-        logger.debug(this.getClass().getName() + ": [" + (endTime - startTime) + "]ms");
+        logger.debug(className + ": [" + (endTime - startTime) + "]ms");
         return context;
     }
     

@@ -74,6 +74,9 @@ public class AdjustCollectionElement implements ControllerElement
                 buildAdjust(childNode);
                 break;
                 
+            case ElementConstants.TEXT_ELEMENT_TAG:
+                continue;
+                
             default:
                 break;
             }

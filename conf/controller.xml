@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <stepControllerConfig>
-	<stepControlle name="1">
+	<stepController name="1">
 		<stepInput className=""/>
 		<stepCollection index="1">
 			<step className="" index="1" timeout="1000"/>
@@ -18,8 +18,8 @@
 			<step className="" index="1" timeout="1000"/>
 		</stepCollection>
 		<stepOutput className=""/>
-	</stepControlle>
-	<stepControlle name="2">
+	</stepController>
+	<stepController name="2">
 		<stepInput className=""/>
 		<stepCollection index="1">
 			<step className="" index="1" timeout="1000"/>
@@ -31,5 +31,5 @@
 			<step className="" index="1" timeout="1000"/>
 		</stepCollection>
 		<stepOutput className=""/>
-	</stepControlle>
+	</stepController>
 </stepControllerConfig>
