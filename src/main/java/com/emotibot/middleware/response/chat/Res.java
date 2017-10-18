@@ -16,7 +16,7 @@ public class Res
     
     @SerializedName("score")
     @Expose
-    private int score;
+    private double score;
     
     @SerializedName("source")
     @Expose
@@ -42,12 +42,12 @@ public class Res
         return this.answer;
     }
     
-    public void setScore(int score)
+    public void setScore(double score)
     {
         this.score = score;
     }
     
-    public int getScore()
+    public double getScore()
     {
         return this.score;
     }

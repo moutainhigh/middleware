@@ -46,7 +46,7 @@ public class ChatResponse extends AbstractResponse
         return res.getAnswer();
     }
     
-    public int getScore()
+    public double getScore()
     {
         if (chat == null)
         {
