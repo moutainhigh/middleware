@@ -4,7 +4,7 @@
   <groupId>com.emotibot</groupId>
   <artifactId>middleware</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.2-SNAPSHOT</version>
   <name>middleware</name>
   <url>http://maven.apache.org</url>
   <distributionManagement>
