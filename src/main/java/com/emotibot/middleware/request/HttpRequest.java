@@ -7,12 +7,27 @@ public class HttpRequest implements Request
     private String body = null;
     
     private HttpRequestType type = null;
+    
+    private String cookieStr = null;
         
+    public HttpRequest()
+    {
+        
+    }
+    
     public HttpRequest(String url, String body, HttpRequestType type)
     {
         this.url = url;
         this.body = body;
         this.type = type;
+    }
+    
+    public HttpRequest(String url, String body, HttpRequestType type, String cookieStr)
+    {
+        this.url = url;
+        this.body = body;
+        this.type = type;
+        this.cookieStr = cookieStr;
     }
     
     public String getUrl()
@@ -45,4 +60,13 @@ public class HttpRequest implements Request
         this.type = type;
     }
     
+    public String getCookieStr()
+    {
+        return this.cookieStr;
+    }
+    
+    public void setCookieStr(String cookieStr)
+    {
+        this.cookieStr = cookieStr;
+    }
 }

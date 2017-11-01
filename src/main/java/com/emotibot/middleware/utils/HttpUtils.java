@@ -39,7 +39,9 @@ public class HttpUtils
         HttpURLConnection conn = null;
         String urlStr = request.getUrl();
         String body = request.getBody();
+        String cookieStr = request.getCookieStr();
         HttpResponse response = new HttpResponse();
+        
 
         try{
             URL url = new URL(urlStr);
@@ -50,6 +52,10 @@ public class HttpUtils
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
+            if (!StringUtils.isEmpty(cookieStr))
+            {
+                conn.setRequestProperty("Cookie", cookieStr);
+            }
 
             OutputStream os = conn.getOutputStream();
             os.write(body.getBytes("UTF-8"));
@@ -58,6 +64,7 @@ public class HttpUtils
 
             int responseCode = conn.getResponseCode();
             response.setStateCode(responseCode);
+            response.setResponseHeader(conn.getHeaderFields());
             if (conn.getResponseCode() != HttpURLConnection.HTTP_OK)
             {
                 response.setResponse("");
@@ -87,6 +94,7 @@ public class HttpUtils
     {
         HttpURLConnection conn = null;
         String urlStr = request.getUrl();
+        String cookieStr = request.getCookieStr();
         HttpResponse response = new HttpResponse();
         try
         {
@@ -98,8 +106,14 @@ public class HttpUtils
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("accept-charset", "UTF-8");
+            if (!StringUtils.isEmpty(cookieStr))
+            {
+                conn.setRequestProperty("Cookie", cookieStr);
+            }
+            
             int responseCode = conn.getResponseCode();
             response.setStateCode(responseCode);
+            response.setResponseHeader(conn.getHeaderFields());
             if (responseCode != HttpURLConnection.HTTP_OK)
             {
                 response.setResponse("");

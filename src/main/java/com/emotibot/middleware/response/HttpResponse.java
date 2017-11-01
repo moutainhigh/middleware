@@ -1,9 +1,13 @@
 package com.emotibot.middleware.response;
 
+import java.util.List;
+import java.util.Map;
+
 public class HttpResponse extends AbstractResponse
 {    
     private String response = null;
     private int stateCode = -1;
+    private Map<String, List<String>> responseHeader = null;
     
     public HttpResponse(String response, int stateCode)
     {
@@ -35,6 +39,16 @@ public class HttpResponse extends AbstractResponse
     public void setStateCode(int stateCode)
     {
         this.stateCode = stateCode;
+    }
+    
+    public Map<String, List<String>> getResponseHeader()
+    {
+        return this.responseHeader;
+    }
+    
+    public void setResponseHeader(Map<String, List<String>> responseHeader)
+    {
+        this.responseHeader = responseHeader;
     }
     
     @Override
