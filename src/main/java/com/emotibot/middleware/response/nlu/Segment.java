@@ -1,5 +1,6 @@
 package com.emotibot.middleware.response.nlu;
 
+import com.emotibot.middleware.utils.JsonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -82,5 +83,11 @@ public class Segment
     public void setLevel(int level) 
     {
         this.level = level;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return JsonUtils.getJsonStr(this);
     }
 }

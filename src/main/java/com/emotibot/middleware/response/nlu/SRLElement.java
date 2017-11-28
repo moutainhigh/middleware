@@ -2,6 +2,7 @@ package com.emotibot.middleware.response.nlu;
 
 import java.util.List;
 
+import com.emotibot.middleware.utils.JsonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -47,5 +48,11 @@ public class SRLElement
     public List<String> getArg2()
     {
         return this.arg2;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return JsonUtils.getJsonStr(this);
     }
 }

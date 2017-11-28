@@ -3,6 +3,7 @@ package com.emotibot.middleware.response.nlu;
 import java.util.List;
 import java.util.Map;
 
+import com.emotibot.middleware.utils.JsonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -76,5 +77,11 @@ public class SRL
     public List<Map<String, String>> getTokens()
     {
         return this.tokens;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return JsonUtils.getJsonStr(this);
     }
 }
