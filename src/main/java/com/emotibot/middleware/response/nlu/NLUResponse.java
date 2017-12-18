@@ -27,6 +27,9 @@ public class NLUResponse extends AbstractResponse
     public NLUResponse(String jsonString)
     {
         super(CommonResponseType.NLU);
+        //为了兼容changhong的nlu格式
+        jsonString = jsonString.replace("\"segment\":", "\"keyword\":");
+        jsonString = jsonString.replace("\"synonymSegment\":", "\"keyword\":");
         Type resultType = new TypeToken<List<NLU>>(){}.getType();
         nluList = (List<NLU>) JsonUtils.getObject(jsonString, resultType);
     }
@@ -259,5 +262,25 @@ public class NLUResponse extends AbstractResponse
             }
         }
         return ret;
+    }
+    
+    public List<Segment> getSegment()
+    {
+        NLU nlu = getNLU();
+        if (nlu == null)
+        {
+            return null;
+        }
+        return nlu.getSegment();
+    }
+    
+    public String getQuery()
+    {
+        NLU nlu = getNLU();
+        if (nlu == null)
+        {
+            return null;
+        }
+        return nlu.getQuery();
     }
 }

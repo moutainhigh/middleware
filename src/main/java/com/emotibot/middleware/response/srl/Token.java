@@ -81,11 +81,11 @@ public class Token implements Comparable<Token>
     {
         if (index > other.index)
         {
-            return -1;
+            return 1;
         }
         else if (index < other.index)
         {
-            return 1;
+            return -1;
         }
         else
         {
