@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -48,6 +49,35 @@ public class FileUtils
                 {
                     
                 }
+            }
+        }
+    }
+    
+    public static void storeFile(List<String> lines, String fileName)
+    {
+        FileWriter fw = null;
+        try
+        {
+            fw = new FileWriter(fileName);
+            for (int i = 0; i < lines.size(); i ++)
+            {
+                fw.write(lines.get(i) + "\r\n");
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+        finally
+        {
+            try
+            {
+                fw.close();
+            } 
+            catch (IOException e)
+            {
+                
             }
         }
     }
