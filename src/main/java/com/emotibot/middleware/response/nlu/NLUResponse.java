@@ -96,6 +96,16 @@ public class NLUResponse extends AbstractResponse
         return parser(namedEntities, Constants.PERSON_START_TAG);
     }
     
+    public String getNameEntity()
+    {
+        NLU nlu = getNLU();
+        if (nlu == null)
+        {
+            return null;
+        }
+        return nlu.getNamedEntities();
+    }
+    
     /**
      * 这里是为了取片名，因为片名中可能有动词，所以会考虑取最后两个动词的对象（考虑一个电影中极少有多个动词）
      * 

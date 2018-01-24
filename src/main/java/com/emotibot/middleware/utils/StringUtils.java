@@ -10,4 +10,16 @@ public class StringUtils
         }
         return false;
     }
+    
+    public static int appearNumber(String srcStr, String findStr)
+    {
+        int count = 0;
+        int index = 0;
+        while ((index = srcStr.indexOf(findStr, index)) != -1) 
+        {
+            index = index + findStr.length();
+            count++;
+        }
+        return count;
+    }
 }
