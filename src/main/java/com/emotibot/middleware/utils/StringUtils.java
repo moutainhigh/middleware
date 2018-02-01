@@ -22,4 +22,14 @@ public class StringUtils
         }
         return count;
     }
+    
+    public static String replaceFirst(String srcStr, String findStr, String replaceStr)
+    {
+        int index = srcStr.indexOf(findStr);
+        if (index < 0)
+        {
+            return srcStr;
+        }
+        return srcStr.substring(0, index) + replaceStr + srcStr.substring(index + findStr.length());
+    }
 }

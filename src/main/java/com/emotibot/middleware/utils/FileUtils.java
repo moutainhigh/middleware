@@ -53,6 +53,42 @@ public class FileUtils
         }
     }
     
+    public static String readFileToString(String fileName)
+    {
+        File file = new File(fileName);
+        BufferedReader reader = null;
+        StringBuilder sb = new StringBuilder();
+        try 
+        {
+            reader = new BufferedReader(new FileReader(file));
+            String line = null;
+            while ((line = reader.readLine()) != null) 
+            {
+                sb.append(line);
+            }
+            return sb.toString();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            return null;
+        } 
+        finally 
+        {
+            if (reader != null) 
+            {
+                try 
+                {
+                    reader.close();
+                } 
+                catch (IOException e1) 
+                {
+                    
+                }
+            }
+        }
+    }
+    
     public static void storeFile(List<String> lines, String fileName)
     {
         FileWriter fw = null;
