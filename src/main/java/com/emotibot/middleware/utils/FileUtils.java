@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,7 +195,9 @@ public class FileUtils
                     List<String> elements = new ArrayList<String>();
                     for (int j = 0; j < xssfRow.getLastCellNum(); j ++)
                     {
-                        elements.add(xssfRow.getCell(j).getStringCellValue());
+                        Cell cell = xssfRow.getCell(j);
+                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        elements.add(cell.getStringCellValue());
                     }
                     ret.add(elements);
                 }
@@ -205,6 +206,7 @@ public class FileUtils
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             return null;
         }
         finally
