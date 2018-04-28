@@ -32,4 +32,25 @@ public class StringUtils
         }
         return srcStr.substring(0, index) + replaceStr + srcStr.substring(index + findStr.length());
     }
+    
+    public static String castDoubleStringToInt(String str)
+    {
+        try
+        {
+            Double doubleValue = Double.parseDouble(str);
+            if (doubleValue % 1 == 0)
+            {
+                Integer intValue = Integer.parseInt(new java.text.DecimalFormat("0").format(doubleValue));
+                return intValue.toString();
+            }
+            else
+            {
+                return str;
+            }
+        }
+        catch(Exception e)
+        {
+            return str;
+        }
+    }
 }
