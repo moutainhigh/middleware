@@ -196,7 +196,7 @@ public class FileUtils
                     for (int j = 0; j < xssfRow.getLastCellNum(); j ++)
                     {
                         Cell cell = xssfRow.getCell(j);
-                        cell.setCellType(Cell.CELL_TYPE_STRING);
+                        cell.setCellType(Cell.CELL_TYPE_STRING); 
                         elements.add(cell.getStringCellValue());
                     }
                     ret.add(elements);
@@ -282,6 +282,35 @@ public class FileUtils
                 {
                     fw.write(lines.get(i) + "\r\n");
                 }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+        finally
+        {
+            try
+            {
+                fw.close();
+            } 
+            catch (IOException e)
+            {
+                
+            }
+        }
+    }
+    
+    public static void appendFile(List<String> lines, String targetFile)
+    {
+        FileWriter fw = null;
+        try
+        {
+            fw = new FileWriter(targetFile, true);
+            for(String line : lines)
+            {
+                fw.write(line + "\r\n");
             }
         }
         catch(Exception e)
