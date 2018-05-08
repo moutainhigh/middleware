@@ -77,4 +77,35 @@ public class StringUtils
 
         return sb.toString();
     }
+    
+    /**
+     * 判断是否不包含中文字母
+     * 
+     * @param chat
+     * @return
+     */
+    public static boolean isAllEnglishChat(String str)
+    {
+        char[] arrays = str.trim().toCharArray();
+        for (int i = 0; i < arrays.length; i ++)
+        {
+            String str1 = String.valueOf(arrays[i]);
+            if(str1.matches("[\u4e00-\u9fa5]+"))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public static String getFileName(String path)
+    {
+        int index1 = path.lastIndexOf("/");
+        int index2 = path.lastIndexOf(".");
+        if (index1 < 0 || index2 < 0 || index1 > index2)
+        {
+            return null;
+        }
+        return path.substring(index1 + 1, index2);
+    }
 }
