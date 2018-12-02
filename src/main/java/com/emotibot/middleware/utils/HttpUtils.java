@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 import com.emotibot.middleware.request.HttpRequest;
 import com.emotibot.middleware.request.HttpRequestType;
@@ -39,7 +40,6 @@ public class HttpUtils
         HttpURLConnection conn = null;
         String urlStr = request.getUrl();
         String body = request.getBody();
-        String cookieStr = request.getCookieStr();
         HttpResponse response = new HttpResponse();
         
 
@@ -50,13 +50,7 @@ public class HttpUtils
             conn.setReadTimeout(timeout);
             conn.setDoOutput(true);
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Accept", "application/json");
-            if (!StringUtils.isEmpty(cookieStr))
-            {
-                conn.setRequestProperty("Cookie", cookieStr);
-            }
-
+            setHttpHeader(request, conn);
             OutputStream os = conn.getOutputStream();
             os.write(body.getBytes("UTF-8"));
             os.flush();
@@ -94,7 +88,6 @@ public class HttpUtils
     {
         HttpURLConnection conn = null;
         String urlStr = request.getUrl();
-        String cookieStr = request.getCookieStr();
         HttpResponse response = new HttpResponse();
         try
         {
@@ -105,11 +98,7 @@ public class HttpUtils
 
             conn.setDoOutput(true);
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("accept-charset", "UTF-8");
-            if (!StringUtils.isEmpty(cookieStr))
-            {
-                conn.setRequestProperty("Cookie", cookieStr);
-            }
+            setHttpHeader(request, conn);
             
             int responseCode = conn.getResponseCode();
             response.setStateCode(responseCode);
@@ -159,5 +148,24 @@ public class HttpUtils
         }
 
         return outstream.toByteArray();
+    }
+    
+    private static void setHttpHeader(HttpRequest request, HttpURLConnection conn)
+    {
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Accept", "application/json");
+        String cookieStr = request.getCookieStr();
+        if (!StringUtils.isEmpty(cookieStr))
+        {
+            conn.setRequestProperty("Cookie", cookieStr);
+        }
+        Map<String, String> headerMap = request.getHeaderMap();
+        if (headerMap != null)
+        {
+            for(Map.Entry<String, String> entry : headerMap.entrySet())
+            {
+                conn.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
     }
 }

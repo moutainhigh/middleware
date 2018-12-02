@@ -1,5 +1,7 @@
 package com.emotibot.middleware.request;
 
+import java.util.Map;
+
 public class HttpRequest implements Request
 {
     private String url = null;
@@ -9,6 +11,8 @@ public class HttpRequest implements Request
     private HttpRequestType type = null;
     
     private String cookieStr = null;
+    
+    private Map<String, String> headerMap;
         
     public HttpRequest()
     {
@@ -68,5 +72,15 @@ public class HttpRequest implements Request
     public void setCookieStr(String cookieStr)
     {
         this.cookieStr = cookieStr;
+    }
+    
+    public Map<String, String> getHeaderMap()
+    {
+        return this.headerMap;
+    }
+    
+    public void setHeaderMap(Map<String, String> headerMap)
+    {
+        this.headerMap = headerMap;
     }
 }

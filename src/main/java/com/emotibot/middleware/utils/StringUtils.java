@@ -1,5 +1,7 @@
 package com.emotibot.middleware.utils;
 
+import java.util.List;
+
 public class StringUtils
 {
     public static boolean isEmpty(String str)
@@ -107,5 +109,17 @@ public class StringUtils
             return null;
         }
         return path.substring(index1 + 1, index2);
+    }
+    
+    public static String buildString(List lists, String space, String split) {
+        if (lists == null || lists.isEmpty()) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Object list : lists) {
+            sb.append(String.valueOf(list)).append(space).append(split).append(space);
+        }
+        String result = sb.toString();
+        return result.substring(0, result.length() - space.length() * 2 - split.length());
     }
 }

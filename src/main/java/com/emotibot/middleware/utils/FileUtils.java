@@ -175,6 +175,7 @@ public class FileUtils
     
     public static List<List<String>> readFileFromXlsx(String xlsxFile)
     {
+
         InputStream is = null;
         XSSFWorkbook xssfWorkbook = null;
         try
@@ -196,6 +197,11 @@ public class FileUtils
                     for (int j = 0; j < xssfRow.getLastCellNum(); j ++)
                     {
                         Cell cell = xssfRow.getCell(j);
+                        if (cell == null)
+                        {
+                            elements.add("");
+                            continue;
+                        }
                         cell.setCellType(Cell.CELL_TYPE_STRING); 
                         elements.add(cell.getStringCellValue());
                     }
