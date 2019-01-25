@@ -371,7 +371,7 @@ public class FileUtils
         }
     }
     
-    public static void writeLogForXls(String xlsFile, Map<String, List<List<String>>> sheetKeyToOutputMap)
+    public static void writeLogForXls(String xlsFile, Map<String, List<List<String>>> sheetKeyToOutputMap, List<String> sheetNames)
     {
         File file = new File(xlsFile);
         if (file.exists())
@@ -384,7 +384,7 @@ public class FileUtils
         {
             os = new FileOutputStream(xlsFile);
             xssfWorkbook = new XSSFWorkbook();
-            for (String sheetName : sheetKeyToOutputMap.keySet())
+            for (String sheetName : sheetNames)
             {
                 List<List<String>> contents = sheetKeyToOutputMap.get(sheetName);
                 if (contents == null)
