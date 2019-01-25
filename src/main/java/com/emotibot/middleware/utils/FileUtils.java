@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -366,6 +367,58 @@ public class FileUtils
             catch (IOException e)
             {
                 e.printStackTrace();
+            }
+        }
+    }
+    
+    public static void writeLogForXls(String xlsFile, Map<String, List<List<String>>> sheetKeyToOutputMap)
+    {
+        File file = new File(xlsFile);
+        if (file.exists())
+        {
+            file.delete();
+        }
+        OutputStream os = null;
+        XSSFWorkbook xssfWorkbook = null;
+        try
+        {
+            os = new FileOutputStream(xlsFile);
+            xssfWorkbook = new XSSFWorkbook();
+            for (String sheetName : sheetKeyToOutputMap.keySet())
+            {
+                List<List<String>> contents = sheetKeyToOutputMap.get(sheetName);
+                if (contents == null)
+                {
+                    continue;
+                }
+                Sheet sheet = xssfWorkbook.createSheet(sheetName);
+                int rowCount = 0;
+                for (List<String> content : contents)
+                {
+                    Row row = sheet.createRow(rowCount);
+                    for (int i = 0; i < content.size(); i ++)
+                    {
+                        Cell cell = row.createCell(i);
+                        cell.setCellValue(content.get(i));
+                    }
+                    rowCount ++;
+                }
+            }
+            xssfWorkbook.write(os);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                os.close();
+            }
+            catch (Exception e)
+            {
+                
             }
         }
     }
