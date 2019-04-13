@@ -1,6 +1,7 @@
 package com.emotibot.middleware.utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -232,6 +234,51 @@ public class FileUtils
         }
     }
     
+    public static List<List<String>> readFileFromXlsx(InputStream inputStream)
+    {
+        XSSFWorkbook xssfWorkbook = null;
+        try
+        {
+            xssfWorkbook = new XSSFWorkbook(inputStream);
+            XSSFSheet xssfSheet = xssfWorkbook.getSheetAt(0);
+            if (xssfSheet == null)
+            {
+                return null;
+            }
+            List<List<String>> ret = new ArrayList<List<String>>();
+            for (int i = 0; i <= xssfSheet.getLastRowNum(); i ++)
+            {
+                XSSFRow xssfRow = xssfSheet.getRow(i);
+                if (xssfRow != null)
+                {
+                    List<String> elements = new ArrayList<String>();
+                    for (int j = 0; j < xssfRow.getLastCellNum(); j ++)
+                    {
+                        Cell cell = xssfRow.getCell(j);
+                        if (cell == null)
+                        {
+                            elements.add("");
+                            continue;
+                        }
+                        cell.setCellType(Cell.CELL_TYPE_STRING); 
+                        elements.add(cell.getStringCellValue());
+                    }
+                    ret.add(elements);
+                }
+            }
+            return ret;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        finally
+        {
+            
+        }
+    }
+    
     public static void writeLogForXls(String xlsFile, List<List<String>> contents)
     {
         File file = new File(xlsFile);
@@ -422,4 +469,35 @@ public class FileUtils
             }
         }
     }
+    
+    public static void writeTxtFile(String file, List<String> contents) {
+        String str = String.join("\n", contents);
+        BufferedWriter osw =null;
+        FileOutputStream fos =null;
+        try {
+            fos = new FileOutputStream(file);
+            osw = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
+            osw.write(str);
+            osw.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if(osw!=null){
+                try {
+                    osw.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if(fos!=null){
+                try {
+                    fos.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    
 }
