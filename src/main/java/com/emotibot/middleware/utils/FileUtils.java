@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -267,6 +269,56 @@ public class FileUtils
                 }
             }
             return ret;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        finally
+        {
+            
+        }
+    }
+    
+    public static Map<String, List<List<String>>> readMutiFileFromXlsx(InputStream inputStream)
+    {
+        XSSFWorkbook xssfWorkbook = null;
+        try
+        {
+            xssfWorkbook = new XSSFWorkbook(inputStream);
+            Iterator<XSSFSheet> sheets = xssfWorkbook.iterator();
+            Map<String, List<List<String>>> retMap = new HashMap<>();
+            while(sheets.hasNext()) {
+                XSSFSheet xssfSheet = sheets.next();
+                if (xssfSheet == null)
+                {
+                    return null;
+                }
+                List<List<String>> ret = new ArrayList<List<String>>();
+                for (int i = 0; i <= xssfSheet.getLastRowNum(); i ++)
+                {
+                    XSSFRow xssfRow = xssfSheet.getRow(i);
+                    if (xssfRow != null)
+                    {
+                        List<String> elements = new ArrayList<String>();
+                        for (int j = 0; j < xssfRow.getLastCellNum(); j ++)
+                        {
+                            Cell cell = xssfRow.getCell(j);
+                            if (cell == null)
+                            {
+                                elements.add("");
+                                continue;
+                            }
+                            cell.setCellType(Cell.CELL_TYPE_STRING); 
+                            elements.add(cell.getStringCellValue());
+                        }
+                        ret.add(elements);
+                    }
+                }
+                retMap.put(xssfSheet.getSheetName(), ret);
+            }
+            return retMap;
         }
         catch(Exception e)
         {
